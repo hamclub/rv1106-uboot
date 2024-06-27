@@ -221,9 +221,12 @@ char *envf_get_part_table(struct blk_desc *desc)
 		ENVF_MSG("Backup  0x%08lx - 0x%08lx\n",
 			 env_offset_redund, env_offset_redund + env_size);
 
-	list = env_get_string(env, env_size, part_type[0]);
-	if (!list)
+	if (desc->if_type == IF_TYPE_MTD) {
+		list = env_get_string(env, env_size, part_type[0]);
+	} else {
 		list = env_get_string(env, env_size, part_type[1]);
+	}
+
 	if (!list)
 		ENVF_MSG("Unavailable env part table\n");
 	else

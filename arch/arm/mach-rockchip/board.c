@@ -1137,9 +1137,8 @@ char *board_fdt_chosen_bootargs(void *fdt)
 	char *env;
 	int id = 0;
 
-	env = env_get(part_type[id]);
-	if (!env)
-		env = env_get(part_type[++id]);
+	while(id < 2) {
+		env = env_get(part_type[id]);
 	if (env) {
 		if (!strstr(env, part_type[id])) {
 			part_list = calloc(1, strlen(env) + strlen(part_type[id]) + 2);
@@ -1155,6 +1154,8 @@ char *board_fdt_chosen_bootargs(void *fdt)
 		if (dump)
 			printf("## parts: %s\n\n", part_list);
 	}
+		id++;
+	}	// end of while(id < 2);
 
 	env = env_get("sys_bootargs");
 	if (env) {
